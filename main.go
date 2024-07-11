@@ -25,7 +25,6 @@ const discoveryNamespace = "example"
 var logger = log.New(os.Stdout, "", log.LstdFlags)
 
 func main() {
-
 	peerAddr := flag.String("peer-address", "", "peer address")
 	flag.Parse()
 
@@ -87,8 +86,7 @@ func writeCounter(s network.Stream) {
 	for {
 		<-time.After(time.Second)
 		counter++
-		err := binary.Write(s, binary.BigEndian, counter)
-		if err != nil {
+		if err := binary.Write(s, binary.BigEndian, counter); err != nil {
 			panic(err)
 		}
 	}
@@ -97,8 +95,7 @@ func writeCounter(s network.Stream) {
 func readCounter(s network.Stream) {
 	for {
 		var counter uint64
-		err := binary.Read(s, binary.BigEndian, &counter)
-		if err != nil {
+		if err := binary.Read(s, binary.BigEndian, &counter); err != nil {
 			panic(err)
 		}
 		logger.Printf("Received %d from %s\n", counter, s.ID())
@@ -110,8 +107,5 @@ type discoveryNotifee struct {
 }
 
 func (n *discoveryNotifee) HandlePeerFound(peerInfo peer.AddrInfo) {
-	logger.Println("found peer", peerInfo.String())
-	if err := n.h.Connect(context.Background(), peerInfo); err != nil {
-		logger.Println("Failed to connect", err)
-	}
+	logger.Println("Found peer", peerInfo.String())
 }
