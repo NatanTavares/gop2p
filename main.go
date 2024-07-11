@@ -22,8 +22,10 @@ import (
 const protocolID = "/example/1.0.0"
 const discoveryNamespace = "example"
 
+var logger = log.New(os.Stdout, "", log.LstdFlags)
+
 func main() {
-	logger := log.New(os.Stdout, "", log.LstdFlags)
+
 	peerAddr := flag.String("peer-address", "", "peer address")
 	flag.Parse()
 
